@@ -26,14 +26,10 @@ inputParser = error "Not implemented yet!"
 ------------ TYPES ------------
 type Input = Void
 
-type OutputA = Void
-
-type OutputB = Void
-
 ------------ PART A ------------
-partA :: Input -> OutputA
+partA :: Input -> Void
 partA = error "Not implemented yet!"
 
 ------------ PART B ------------
-partB :: Input -> OutputB
+partB :: Input -> Void
 partB = error "Not implemented yet!"
