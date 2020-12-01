@@ -14,6 +14,8 @@ import qualified Util.Util as U
 import qualified Program.RunDay as R (runDay)
 import Data.Attoparsec.Text
 import Data.Void
+
+import Util.Util
 {- ORMOLU_ENABLE -}
 
 runDay :: Bool -> String -> IO ()
@@ -21,15 +23,15 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = (string `sepBy1` (char ' ')) `sepBy` endOfLine
+inputParser = (many1 letter `sepBy1` (char ' ')) `sepBy` endOfLine
 
 ------------ TYPES ------------
 type Input = [[String]]
 
 ------------ PART A ------------
-partA :: Input -> Void
-partA = error "Not implemented yet!"
+partA :: Input -> Int
+partA = length . filter (\ls -> let s = sort ls in nub s == s)
 
 ------------ PART B ------------
-partB :: Input -> Void
-partB = error "Not implemented yet!"
+partB :: Input -> Int
+partB = length . filter (\ls -> let s = sort ls in nub s == s) . map (map freq)
