@@ -40,3 +40,21 @@ chunksOf n ls
   | n <= 0 = error "Cannot split into chunks of negative length."
   | length ls < n = [ls]
   | otherwise = (take n ls) : (chunksOf n (drop n ls))
+
+
+data Repeat a = Repeat
+    { value :: a
+    , firstIndex :: Int
+    , secondIndex :: Int 
+    }
+
+-- Find the first time that an element repeats in a list.
+-- Returns Nothing if no repeats were found.
+firstRepeat :: Ord a => [a] -> Maybe (Repeat a)
+firstRepeat xs = firstRepeat' xs Map.empty 0
+  where
+    firstRepeat' [] _ _ = Nothing
+    firstRepeat' (x:xs) seen i = 
+      case Map.lookup x seen of
+        Just i' -> pure $ Repeat x i' i
+        Nothing -> firstRepeat' xs (Map.insert x i seen) (i+1)
