@@ -11,9 +11,14 @@ import Data.Vector (Vector)
 import qualified Data.Vector as Vec
 import qualified Util.Util as U
 
+import Control.Applicative.Combinators hiding (choice, sepBy)
+
 import qualified Program.RunDay as R (runDay)
 import Data.Attoparsec.Text
 import Data.Void
+
+import Data.Functor
+import Data.Bifunctor (first)
 {- ORMOLU_ENABLE -}
 
 runDay :: Bool -> String -> IO ()
@@ -21,15 +26,26 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = let
+  group n = do
+    char '{' 
+    results <- (garbage <|> group (n+1)) `sepBy` char ','
+    char '}'
+    return (sum (map fst results) + n, sum (map snd results))
+  garbage = do
+    char '<'
+    garbo <- many $ (char '!' >> anyChar $> 0) <|> (satisfy (/= '>') $> 1)
+    char '>'
+    return (0, sum garbo)
+  in group 1
 
 ------------ TYPES ------------
-type Input = Void
+type Input = (Int, Int)
 
 ------------ PART A ------------
-partA :: Input -> Void
-partA = error "Not implemented yet!"
+partA :: Input -> Int
+partA = fst
 
 ------------ PART B ------------
-partB :: Input -> Void
-partB = error "Not implemented yet!"
+partB :: Input -> Int
+partB = snd
