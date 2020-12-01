@@ -1,4 +1,4 @@
-module Days.Day05 (runDay) where
+module Days.Day04 (runDay) where
 
 {- ORMOLU_DISABLE -}
 import Data.List
@@ -21,10 +21,10 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = (string `sepBy1` (char ' ')) `sepBy` endOfLine
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [[String]]
 
 ------------ PART A ------------
 partA :: Input -> Void

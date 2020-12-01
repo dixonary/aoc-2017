@@ -1,4 +1,4 @@
-module Days.Day04 (runDay) where
+module Days.Day05 (runDay) where
 
 {- ORMOLU_DISABLE -}
 import Data.List
