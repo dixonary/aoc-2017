@@ -31,7 +31,7 @@ inputParser = let
     char '{' 
     results <- (garbage <|> group (n+1)) `sepBy` char ','
     char '}'
-    return (sum (map fst results) + n, sum (map snd results))
+    return (sum (fst <$> results) + n, sum (snd <$> results))
   garbage = do
     char '<'
     garbo <- many $ (char '!' >> anyChar $> 0) <|> (satisfy (/= '>') $> 1)
