@@ -11,6 +11,10 @@ import Data.Vector (Vector)
 import qualified Data.Vector as Vec
 import qualified Util.Util as U
 
+import Control.Applicative.Combinators
+
+import Data.Functor
+
 import qualified Program.RunDay as R (runDay)
 import Data.Attoparsec.Text
 import Data.Void
@@ -21,15 +25,20 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = many $ digit <&> (read.pure)
+
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [Int]
 
 ------------ PART A ------------
-partA :: Input -> Void
-partA = error "Not implemented yet!"
+partA :: Input -> Int
+partA input = sum $ zipWith f input (tail $ cycle input)
+    where 
+      f x y = if x == y then x else 0
 
 ------------ PART B ------------
-partB :: Input -> Void
-partB = error "Not implemented yet!"
+partB :: Input -> Int
+partB input = sum $ zipWith f input (drop (length input `div` 2) $ cycle input)
+    where
+      f x y = if x == y then x else 0
