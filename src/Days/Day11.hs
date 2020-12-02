@@ -14,22 +14,66 @@ import qualified Util.Util as U
 import qualified Program.RunDay as R (runDay)
 import Data.Attoparsec.Text
 import Data.Void
+import Data.Functor (($>))
+import Data.Ratio
 {- ORMOLU_ENABLE -}
+
+import Data.Ord (comparing)
+import Control.Arrow ((>>>))
 
 runDay :: Bool -> String -> IO ()
 runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser =
+  let dir = choice $ map (\(x,y)->(string x $> y))
+            [ ("nw", NW)
+            , ("ne", NE)
+            , ("n" , N )
+            , ("sw", SW)
+            , ("se", SE)
+            , ("s" , S )
+            ]
+  in dir `sepBy` char ','
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [HexDir]
+
+data HexDir      = N
+            | NW     | NE
+            | SW     | SE
+                 | S
+  deriving (Show)
+
+type Coord = (Ratio Int,Ratio Int)
+(x,y) .+. (x',y') = (x+x', y+y')
+
+toEuclid :: HexDir -> Coord
+toEuclid N  = ( 0,-1)
+toEuclid S  = ( 0, 1)
+toEuclid NW = (-1%2,-1%2)
+toEuclid NE = (1%2, -1%2)
+toEuclid SW = (-1%2,1%2)
+toEuclid SE = (1%2, 1%2)
+
+hexDistance :: Coord -> Coord -> Ratio Int
+hexDistance (x,y) (x',y') =
+    let
+      dx = x' - x
+      dy = y' - y
+      dz = 0 - dx - dy
+    in (abs dx + abs dy + abs dz) * (1 % 2)
 
 ------------ PART A ------------
-partA :: Input -> Void
-partA = error "Not implemented yet!"
+partA :: Input -> Ratio Int
+partA = fmap toEuclid
+      >>> foldr1 (.+.)
+      >>> hexDistance (0,0)
 
 ------------ PART B ------------
-partB :: Input -> Void
-partB = error "Not implemented yet!"
+partB :: Input -> Ratio Int
+partB = fmap toEuclid
+      >>> scanl1 (.+.)
+      >>> maximumBy (comparing (hexDistance (0,0)))
+      >>> hexDistance (0,0)
