@@ -1,14 +1,14 @@
 module Util.Util where
 
 {- ORMOLU_DISABLE -}
-import Data.List
-import Data.Map.Strict (Map)
+import           Data.List
+import           Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe
-import Data.Set (Set)
-import qualified Data.Set as Set
-import Data.Vector (Vector)
-import qualified Data.Vector as Vec
+import           Data.Maybe
+import           Data.Set        (Set)
+import qualified Data.Set        as Set
+import           Data.Vector     (Vector)
+import qualified Data.Vector     as Vec
 {- ORMOLU_ENABLE -}
 
 {-
@@ -38,14 +38,15 @@ mapFromNestedLists = Map.fromList . attachCoords 0 0
 chunksOf :: Int -> [a] -> [[a]]
 chunksOf n ls
   | n <= 0 = error "Cannot split into chunks of negative length."
+  | length ls == 0 = []
   | length ls < n = [ls]
   | otherwise = (take n ls) : (chunksOf n (drop n ls))
 
 
 data Repeat a = Repeat
-    { value :: a
-    , firstIndex :: Int
-    , secondIndex :: Int 
+    { value       :: a
+    , firstIndex  :: Int
+    , secondIndex :: Int
     }
 
 -- Find the first time that an element repeats in a list.
@@ -54,7 +55,7 @@ firstRepeat :: Ord a => [a] -> Maybe (Repeat a)
 firstRepeat xs = firstRepeat' xs Map.empty 0
   where
     firstRepeat' [] _ _ = Nothing
-    firstRepeat' (x:xs) seen i = 
+    firstRepeat' (x:xs) seen i =
       case Map.lookup x seen of
         Just i' -> pure $ Repeat x i' i
         Nothing -> firstRepeat' xs (Map.insert x i seen) (i+1)
