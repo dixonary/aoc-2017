@@ -41,8 +41,8 @@ inputParser = let
 ------------ TYPES ------------
 type Input = [(Int, [Int])]
 
-sccs :: Input -> [[Int]]
-sccs input = input
+comps :: Input -> [[Int]]
+comps input = input
            & fmap (\(x,y) -> (x,x,y))
            & graphFromEdges
            & (\(a,b,c) -> a)
@@ -51,9 +51,9 @@ sccs input = input
 
 ------------ PART A ------------
 partA :: Input -> Int
-partA = length . fromJust . find (elem 0) . sccs
+partA = length . fromJust . find (elem 0) . comps
 
 
 ------------ PART B ------------
 partB :: Input -> Int
-partB = length . sccs
+partB = length . comps
