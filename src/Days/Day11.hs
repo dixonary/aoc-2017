@@ -75,5 +75,5 @@ partA = fmap toEuclid
 partB :: Input -> Ratio Int
 partB = fmap toEuclid
       >>> scanl1 (.+.)
-      >>> maximumBy (comparing (hexDistance (0,0)))
-      >>> hexDistance (0,0)
+      >>> fmap (hexDistance (0,0))
+      >>> maximum
