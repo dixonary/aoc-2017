@@ -23,6 +23,7 @@ import Data.Bits
 import Data.Function (on)
 import Text.Printf
 import Debug.Trace
+import Data.Maybe
 {- ORMOLU_ENABLE -}
 
 runDay :: Bool -> String -> IO ()
@@ -39,7 +40,7 @@ inputParser = do
   return (a,b)
 
 ------------ TYPES ------------
-type Input = (Int,Int)
+type Input = (Integer,Integer)
 
 imax = 2147483647
 
@@ -50,8 +51,8 @@ imax = 2147483647
 
 observe iters propA propB (seedA,seedB) = let
   mul n x = (x * n) `mod` imax
-  as = filter propA $ iterate (mul 16807) seedA
-  bs = filter propB $ iterate (mul 48271) seedB
+  as = filter propA $ tail $ iterate (mul 16807) seedA
+  bs = filter propB $ tail $ iterate (mul 48271) seedB
   a `matches` b = (a `mod` 2^16) == (b `mod` 2^16)
   in length
       $ filter id
@@ -71,3 +72,4 @@ partB = observe
         5_000_000
         (\x -> (x `mod` 4) == 0) -- only take mults of 4
         (\x -> (x `mod` 8) == 0) -- only take mults of 8
+
