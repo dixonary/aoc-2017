@@ -54,6 +54,7 @@ data DanceMove
   deriving (Show)
 
 -- A permutation maps initial position to final position.
+-- Note that we compose forwards (a >>> b)
 newtype Perm = Perm (Map Int Int)
 instance Semigroup Perm where
   (Perm !ma) <> (Perm !mb) = Perm (U.composeMaps ma mb)
@@ -62,6 +63,7 @@ instance Monoid Perm where
 
 -- A rename modifies a permutation to switch
 -- positions around.
+-- Note that we compose forwards (a >>> b)
 newtype Rename = Rename (Perm -> Perm)
 instance Semigroup Rename where
   (Rename !a) <> (Rename !b) = Rename (a >>> b)
@@ -71,10 +73,11 @@ instance Monoid Rename where
 range = [0..15]
 total = 16
 
+-- Unmodified (reflxeive) mapping.
 refl :: Map Int Int
 refl = Map.fromList $ zip range range
 
--- Function which converts chars to vals
+-- Function which converts chars to integers.
 ctoi = ((Map.fromList $ zip ['a'..'p'] [0..]) Map.!)
 itoc = ((Map.fromList $ zip [0..] ['a'..'p']) Map.!)
 
@@ -109,6 +112,6 @@ partA moves = let
 partB :: Input -> (String)
 partB moves = let
     (Rename rename, perm) = computePerms moves
-    fullRename = stimes 1_000_000_000 rename
-    fullPerm   = stimes 1_000_000_000 perm
-    in renderPerm $ fullRename mempty <> fullPerm
+    rename' = stimes 1_000_000_000 rename
+    perm'   = stimes 1_000_000_000 perm
+    in renderPerm $ rename' mempty <> perm'
