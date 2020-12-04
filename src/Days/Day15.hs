@@ -44,11 +44,6 @@ type Input = (Integer,Integer)
 
 imax = 2147483647
 
--- This solution gives the right answers for
--- a,b on the example data
--- a on my own data
--- NOT b on my own data :(
-
 observe iters propA propB (seedA,seedB) = let
   mul n x = (x * n) `mod` imax
   as = filter propA $ tail $ iterate (mul 16807) seedA
