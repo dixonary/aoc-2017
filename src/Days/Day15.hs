@@ -42,10 +42,8 @@ inputParser = do
 ------------ TYPES ------------
 type Input = (Int,Int)
 
-imax = 2147483647
-
 observe iters propA propB (seedA,seedB) = let
-  mul n x = (x * n) `mod` imax
+  mul n x = (x * n) `mod` 2147483647
   as = filter propA $ tail $ iterate (mul 16807) seedA
   bs = filter propB $ tail $ iterate (mul 48271) seedB
   a `matches` b = (a `mod` 2^16) == (b `mod` 2^16)
