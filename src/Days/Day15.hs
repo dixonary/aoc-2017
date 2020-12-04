@@ -40,7 +40,7 @@ inputParser = do
   return (a,b)
 
 ------------ TYPES ------------
-type Input = (Integer,Integer)
+type Input = (Int,Int)
 
 imax = 2147483647
 
