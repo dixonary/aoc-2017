@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Util.Util where
 
 {- ORMOLU_DISABLE -}
@@ -59,3 +60,11 @@ firstRepeat xs = firstRepeat' xs Map.empty 0
       case Map.lookup x seen of
         Just i' -> pure $ Repeat x i' i
         Nothing -> firstRepeat' xs (Map.insert x i seen) (i+1)
+
+-- We need this here, because containers on stackage is too old
+-- and doesn't include `compose` :(
+
+composeMaps :: Ord b => Map b c -> Map a b -> Map a c
+composeMaps bc !ab
+  | null bc = Map.empty
+  | otherwise = Map.mapMaybe (bc Map.!?) ab
