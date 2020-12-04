@@ -4,6 +4,11 @@ import Data.Attoparsec.Text
 import Data.Map (Map)
 import qualified Data.Map as Map
 
+import Data.Char (ord)
+import Data.Bits (Bits, shiftL, (.|.))
+import qualified Data.Text as T
+import Prelude hiding (takeWhile)
+
 {-
 This module contains a list of parsers which are likely to be useful for Advent of Code problems.
 -}

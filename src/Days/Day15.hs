@@ -48,26 +48,26 @@ imax = 2147483647
 -- a on my own data
 -- NOT b on my own data :(
 
-observe propA propB iters (seedA,seedB) = let
+observe iters propA propB (seedA,seedB) = let
   mul n x = (x * n) `mod` imax
   as = filter propA $ iterate (mul 16807) seedA
   bs = filter propB $ iterate (mul 48271) seedB
-  sameLowest = (==) `on` (`mod` 2^16)
-  in foldl' (+) 0
-      $ map fromEnum
+  a `matches` b = (a `mod` 2^16) == (b `mod` 2^16)
+  in length
+      $ filter id
       $ Prelude.take iters
-      $ zipWith sameLowest as bs
+      $ zipWith matches as bs
 
 ------------ PART A ------------
 partA :: Input -> Int
 partA = observe
-        (const True)
-        (const True)
         40_000_000
+        (const True) -- take every number
+        (const True) -- take every number
 
 ------------ PART B ------------
 partB :: Input -> Int
 partB = observe
-        (\x -> (x `mod` 4) == 0)
-        (\x -> (x `mod` 8) == 0)
         5_000_000
+        (\x -> (x `mod` 4) == 0) -- only take mults of 4
+        (\x -> (x `mod` 8) == 0) -- only take mults of 8
