@@ -10,6 +10,8 @@ import           Data.Set        (Set)
 import qualified Data.Set        as Set
 import           Data.Vector     (Vector)
 import qualified Data.Vector     as Vec
+
+import Control.Monad
 {- ORMOLU_ENABLE -}
 
 {-
@@ -68,3 +70,12 @@ composeMaps :: Ord b => Map b c -> Map a b -> Map a c
 composeMaps bc !ab
   | null bc = Map.empty
   | otherwise = Map.mapMaybe (bc Map.!?) ab
+
+-- | Keep running an operation until it becomes 'False'.
+whileM :: Monad m => m Bool -> m ()
+whileM act = do
+  b <- act
+  when b $ whileM act
+
+ifM :: Monad m => m Bool -> m a -> m a -> m a
+ifM b t f = do b <- b; if b then t else f

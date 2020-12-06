@@ -29,6 +29,7 @@ dependencies:
 - mtl
 - vector
 - pointedlist
+- monad-loops
 
 library:
   source-dirs: src
