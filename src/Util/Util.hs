@@ -71,11 +71,5 @@ composeMaps bc !ab
   | null bc = Map.empty
   | otherwise = Map.mapMaybe (bc Map.!?) ab
 
--- | Keep running an operation until it becomes 'False'.
-whileM :: Monad m => m Bool -> m ()
-whileM act = do
-  b <- act
-  when b $ whileM act
-
 ifM :: Monad m => m Bool -> m a -> m a -> m a
 ifM b t f = do b <- b; if b then t else f
